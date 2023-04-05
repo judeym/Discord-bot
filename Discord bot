@@ -1,0 +1,32 @@
+import requests
+import json
+import random
+from discord.ext import commands
+TOKEN = "MTA4OTk1NTc1NjY3NTE4Njg0OQ.GkwTzB.BqAH_Y5ec5TLlHUQd3FPhvux9SEFLaGFY1k7xQ"
+
+bot = commands.Bot(command_prefix ="gif")
+
+@bot.command(name="s")
+async def Gif (ctx):
+    apikey = "LIVDSRZULELA"
+    lmt = 100
+
+    search_term = "travis scott"
+    r = requests.get("https://g.tenor.com/v1/search?q=%s&key=%s&limit=%s" % (search_term, apikey, lmt))
+    print(r)
+    data = json.loads(r.content)
+    number = random.randint(0,70)
+    url = data['results'][number]['media'][0]['nanogif']['url']
+    await ctx.send(url)
+
+    if r.status_code == 200:
+        top_100gifs = json.loads(r.content)
+        print(top_100gifs)
+
+    else:
+        top_100ifs = None
+@bot.event
+async def on_ready():
+    print(f'{bot.user} successfully logged in!')
+
+bot.run(TOKEN)
